@@ -1,0 +1,37 @@
+# --------------------------------------------------- // User Packages
+# Add any additional packages you want to install alongside HyDE
+# One package per line, comments start with #
+# Examples:
+
+# Development tools
+git                                                     # distributed version control system
+nvm-git                                                 # Node Version Manager (installs Node.js versions)
+flutter                                                 # UI toolkit for building apps (AUR package)
+android-studio                                          # Android IDE
+cursor                                                  # AI-powered code editor (AUR package)
+golang                                                  # Go programming language
+python                                                  # Python programming language
+php                                                     # PHP programming language
+
+# Productivity apps
+# libreoffice-fresh
+# thunderbird
+# nextcloud-client
+
+# Media apps
+vlc                                                     # media player
+# gimp
+# inkscape
+
+# Gaming
+# steam
+# lutris
+# wine
+
+# System utilities
+# htop
+neofetch                                                # system information fetch tool
+# timeshift
+
+# Add your packages below:
+
