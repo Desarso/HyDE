@@ -1,1 +1,20 @@
 /* User custom styles */
+
+
+#custom-recording.inactive{
+    font-size: 11px; 
+    padding: 3px;
+    color: #ffffff;   /* Default icon color (light gray) - change as desired */
+}
+
+#custom-recording.recording{
+    font-size: 12px; 
+    padding: 3px;
+    color: #ff0202;   /* Default icon color (light gray) - change as desired */
+}
+
+#custom-recording.processing{
+    font-size: 12px; 
+    padding: 3px;
+    color: #ff5100;   /* Default icon color (light gray) - change as desired */
+}

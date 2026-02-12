@@ -1,0 +1,10 @@
+{
+    "custom/recording": {
+        "exec": "$HOME/.local/share/waybar/modules/status_indicator.sh",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 1,
+        "tooltip": true,
+        "on-click": "$HOME/go/bin/screen_record &"
+    }
+}

@@ -1,0 +1,17 @@
+# --------------------------------------------------- // User Packages
+# Packages installed alongside HyDE from our fork
+
+# --------------------------------------------------- // Development
+go                                                      # Go programming language
+npm                                                     # Node.js package manager
+bun                                                     # Fast JavaScript runtime & toolkit
+php                                                     # PHP programming language
+
+# --------------------------------------------------- // Browsers
+google-chrome                                           # Google Chrome browser (AUR)
+
+# --------------------------------------------------- // Media
+vlc                                                     # Media player
+
+# --------------------------------------------------- // System
+neofetch                                                # System information fetch tool
