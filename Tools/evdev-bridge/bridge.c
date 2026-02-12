@@ -403,7 +403,8 @@ int main(int argc, char *argv[]) {
         sleep(2);
     }
 
-    /* Open devices */
+    /* Open devices with O_NONBLOCK so inner read loops drain without blocking.
+     * poll() handles waiting for new events. */
     kbd_fd = open(kbd_path, O_RDONLY | O_NONBLOCK);
     if (kbd_fd < 0) {
         fprintf(stderr, "[bridge] Cannot open keyboard %s: %s\n", kbd_path, strerror(errno));
@@ -428,7 +429,7 @@ int main(int argc, char *argv[]) {
 
     /* Event loop */
     while (running) {
-        struct pollfd fds[4];
+        struct pollfd fds[3];
         int nfds = 0;
 
         fds[nfds].fd = kbd_fd;
@@ -445,19 +446,19 @@ int main(int argc, char *argv[]) {
             nfds++;
         }
 
-        /* Also poll Wayland display fd for events */
-        fds[nfds].fd = wl_display_get_fd(display);
-        fds[nfds].events = POLLIN;
-        nfds++;
-
-        int ret = poll(fds, nfds, 100);
+        int ret = poll(fds, nfds, 50);
         if (ret < 0) {
             if (errno == EINTR) continue;
             break;
         }
 
-        /* Process Wayland events */
+        /* Process pending Wayland events */
+        if (wl_display_prepare_read(display) == 0) {
+            wl_display_cancel_read(display);
+        }
         wl_display_dispatch_pending(display);
+
+        if (ret == 0) continue; /* timeout, no evdev events */
 
         /* Read evdev events */
         struct input_event ev;
@@ -465,7 +466,8 @@ int main(int argc, char *argv[]) {
 
         /* Keyboard */
         if (fds[idx].revents & POLLIN) {
-            while (read(kbd_fd, &ev, sizeof(ev)) == sizeof(ev)) {
+            ssize_t n;
+            while ((n = read(kbd_fd, &ev, sizeof(ev))) == sizeof(ev)) {
                 handle_keyboard_event(&ev);
             }
         }
@@ -473,7 +475,8 @@ int main(int argc, char *argv[]) {
 
         /* Relative mouse */
         if (fds[idx].revents & POLLIN) {
-            while (read(rel_mouse_fd, &ev, sizeof(ev)) == sizeof(ev)) {
+            ssize_t n;
+            while ((n = read(rel_mouse_fd, &ev, sizeof(ev))) == sizeof(ev)) {
                 handle_mouse_event(&ev);
             }
         }
@@ -482,7 +485,8 @@ int main(int argc, char *argv[]) {
         /* Absolute mouse */
         if (abs_mouse_fd >= 0) {
             if (fds[idx].revents & POLLIN) {
-                while (read(abs_mouse_fd, &ev, sizeof(ev)) == sizeof(ev)) {
+                ssize_t n;
+                while ((n = read(abs_mouse_fd, &ev, sizeof(ev))) == sizeof(ev)) {
                     handle_abs_mouse_event(&ev);
                 }
             }
