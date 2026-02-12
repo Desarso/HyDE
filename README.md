@@ -85,21 +85,26 @@ To install, execute the following commands:
 
 ```shell
 sudo pacman -S --needed git base-devel
-git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyDE
+git clone --depth 1 https://github.com/Desarso/HyDE ~/HyDE
 cd ~/HyDE/Scripts
-./install.sh
+./install.sh pkg_user.lst
 ```
 
+This will install HyDE along with our custom packages (go, npm, bun, php, google-chrome, vlc, etc.).
+
+After the main install completes, run the post-install script for additional tools:
+
+```shell
+./install_user.sh
+```
+
+This installs [uv](https://docs.astral.sh/uv/), [Cursor](https://cursor.com/), and [phpv](https://github.com/Its-Satyajit/phpv).
+
 > [!TIP]
-> You can also add any other apps you wish to install alongside HyDE to `Scripts/pkg_user.lst` and pass the file as a parameter to install it like so:
->
-> ```shell
-> ./install.sh pkg_user.lst
-> ```
+> You can also add any other apps you wish to install to `Scripts/pkg_user.lst` and the installer will pick them up automatically.
 
 > [!IMPORTANT]
-> Refer your list from `Scripts/pkg_extra.lst`
-> or you can `cp Scripts/pkg_extra.lst Scripts/pkg_user.lst` if you wish to install all extra packages.
+> Refer to `Scripts/pkg_extra.lst` for additional packages available from upstream HyDE.
 
 <!--
 
@@ -153,7 +158,7 @@ To update HyDE, you will need to pull the latest changes from GitHub and restore
 cd ~/HyDE/Scripts
 git fetch --update-shallow --depth 1 origin master
 git reset --hard origin/master
-./install.sh -r
+./install.sh -r pkg_user.lst
 ```
 
 > [!IMPORTANT]
@@ -183,7 +188,7 @@ HyDEVM is a script that allows you to run HyDE in a virtual machine for testing 
 
 ```bash
 # Download and run (will auto-detect missing packages)
-curl -L https://raw.githubusercontent.com/HyDE-Project/HyDE/main/Scripts/hydevm/hydevm.sh -o hydevm
+curl -L https://raw.githubusercontent.com/Desarso/HyDE/master/Scripts/hydevm/hydevm.sh -o hydevm
 chmod +x hydevm
 ./hydevm
 ```
@@ -192,7 +197,7 @@ chmod +x hydevm
 
 ```bash
 # Using flakes from HyDE repository
-nix run github:HyDE-Project/HyDE
+nix run github:Desarso/HyDE
 
 # Or if you have the repository cloned locally
 nix run .
